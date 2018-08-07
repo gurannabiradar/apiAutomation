@@ -1,0 +1,53 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+
+repositories {
+    mavenCentral()
+}
+
+project.ext {
+    restAssuredVersion = '3.0.2'
+    testNGVersion = '6.11'
+    junitVersion = '4.12'
+    log4jVersion = '2.8.2'
+    cucumberVersion = '2.0.0'
+    cucumberDepsVersion = '1.0.6'
+    javaxVersion = '2.1-m05'
+    jacksonVersion = '2.9.3'
+    httpVersion = '4.5.3'
+    htmlUnitVersion = '2.24'
+    seleniumVersion = '3.4.0'
+}
+
+dependencies{
+    testCompile group: 'io.rest-assured', name: 'rest-assured', version: restAssuredVersion
+    testCompile group: 'org.testng', name: 'testng', version: testNGVersion
+    testCompile group: 'junit', name: 'junit', version: junitVersion
+    testCompile group: 'org.apache.logging.log4j', name: 'log4j-api', version: log4jVersion
+    testCompile group: 'org.apache.logging.log4j', name: 'log4j-core', version: log4jVersion
+    testCompile group: 'io.cucumber', name: 'cucumber-java8', version: cucumberVersion
+    testCompile group: 'io.cucumber', name: 'cucumber-testng', version: cucumberVersion
+    testCompile group: 'io.cucumber', name: 'cucumber-junit', version: cucumberVersion
+    testCompile group: 'io.cucumber', name: 'cucumber-jvm-deps', version: cucumberDepsVersion
+    testCompile group: 'javax.ws.rs', name: 'javax.ws.rs-api', version: javaxVersion
+    testCompile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: jacksonVersion
+    testCompile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jacksonVersion
+    testCompile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: jacksonVersion
+    testCompile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: jacksonVersion
+    testCompile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: jacksonVersion
+    testCompile group: 'org.apache.httpcomponents', name: 'httpclient', version: httpVersion
+    testCompile group: 'log4j', name: 'log4j', version: '1.2.17'
+    testCompile group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: htmlUnitVersion
+    testCompile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: seleniumVersion
+}
+
+test {
+    useTestNG() {
+        systemProperty "test.environment", System.getProperty("test.environment")
+        systemProperty "cucumber.options", System.getProperty("cucumber.options")
+        useDefaultListeners()
+        //configFailurePolicy="continue"
+        listeners << 'org.testng.reporters.EmailableReporter'
+        suites file('testng.xml')
+    }
+}
